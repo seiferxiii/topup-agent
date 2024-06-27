@@ -56,5 +56,6 @@ yarn install
 ```bash
 pm2 start
 ```
+7. Insert your first Account, Character and Item on ShopItemMap for the connection testing to see if the topup agent connection will be established
 
-7. Go to the merchant panel and check if the topup agent connection was established
+8. Go to the merchant panel and check if the topup agent connection was established
