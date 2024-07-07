@@ -3,8 +3,7 @@
 ## Allows your server to communicate with the ran network merchant panel
 
 ## Setup
-1. Install required softwares
-    - Node.js v18 or higher
+1. Install [Node.js v18](https://nodejs.org/dist/v18.20.3/node-v18.20.3-x64.msi)
 2. Install yarn and pm2
 ```bash
 npm install yarn -g
