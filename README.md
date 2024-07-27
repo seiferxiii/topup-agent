@@ -49,15 +49,14 @@ Notes:
 
 5. Go to topup-agent folder and Open the terminal and run the following command
 ```bash
-yarn install
+npm install pm2 -g && npm install yarn -g && yarn install
 ```
 
 6. Go to topup-agent folder and Start the server. Go to the terminal and run the following command
 
 ```bash
-node ace migration:run
-pm2 start
-pm2 save
+yarn initialize
+yarn start
 ```
 7. Insert your first Account, Character and Item on ShopItemMap for the connection testing to see if the topup agent connection will be established
 
