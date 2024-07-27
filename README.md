@@ -38,12 +38,14 @@ MMR_COLUMN=ChaMMRScore
 PK_KILL_COLUMN=ChaPKScore
 PK_DEATH_COLUMN=ChaPKDeath
 CHARACTER_LEVEL_DATE_COLUMN=ChaMaxLevelDate
+DISBURSEMENT_MODE=epoints
 ```
 
 Notes: 
 - Get the SERVER_KEY from the merchant panel
 - Configure the MSSQL SERVER ip address, port, username and password
 - Configure the Database Names, table and column names according to your server version
+- Configure DISBURSEMENT_MODE to epoints or topup
 
 5. Go to topup-agent folder and Open the terminal and run the following command
 ```bash
@@ -53,7 +55,9 @@ yarn install
 6. Go to topup-agent folder and Start the server. Go to the terminal and run the following command
 
 ```bash
+node ace migration:run
 pm2 start
+pm2 save
 ```
 7. Insert your first Account, Character and Item on ShopItemMap for the connection testing to see if the topup agent connection will be established
 

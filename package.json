@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "node server.js",
+    "start": "pm2 start && pm2 save",
     "test": "node ace test",
     "lint": "eslint . --ext=.ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "initialize": "yarn install && node ace migration:run"
   },
   "eslintConfig": {
     "extends": [

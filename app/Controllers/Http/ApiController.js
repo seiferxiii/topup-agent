@@ -9,6 +9,7 @@ const TopupHistory_1 = __importDefault(global[Symbol.for('ioc.use')]("App/Models
 const User_1 = __importDefault(global[Symbol.for('ioc.use')]("App/Models/User"));
 const ran_1 = __importDefault(global[Symbol.for('ioc.use')]("Config/ran"));
 const ShopItemMap_1 = __importDefault(global[Symbol.for('ioc.use')]("App/Models/ShopItemMap"));
+const Topup_1 = __importDefault(global[Symbol.for('ioc.use')]("App/Models/Topup"));
 class ApiController {
     async login({ auth, request, response }) {
         const { username, password } = request.body();
@@ -105,13 +106,33 @@ class ApiController {
                 message: 'Invalid user',
             });
         }
-        if (Number(user.epoints) > 0) {
-            user.epoints = Number(user.epoints) + Number(amount);
+        if (Env_1.default.get('DISBURSEMENT_TYPE') == 'epoints') {
+            if (Number(user.epoints) > 0) {
+                user.epoints = Number(user.epoints) + Number(amount);
+            }
+            else {
+                user.epoints = Number(amount);
+            }
+            await user.save();
         }
-        else {
-            user.epoints = Number(amount);
+        if (Env_1.default.get('DISBURSEMENT_TYPE') == 'topup') {
+            let topupCode = ran_1.default.generateRandomString(11);
+            let topupPin = ran_1.default.generateRandomString(8);
+            const topupCodeCheck = await Topup_1.default.findBy('code', topupCode);
+            if (topupCodeCheck) {
+                topupCode = ran_1.default.generateRandomString(11);
+            }
+            const topupPinCheck = await Topup_1.default.findBy('pin', topupCode);
+            if (topupPinCheck) {
+                topupPin = ran_1.default.generateRandomString(8);
+            }
+            await Topup_1.default.create({
+                code: topupCode,
+                pin: topupPin,
+                code_value: Number(amount),
+                user_id: user.id,
+            });
         }
-        await user.save();
         const topupHistory = await TopupHistory_1.default.create({
             user_id: user.id,
             amount: Number(amount),
@@ -124,6 +145,32 @@ class ApiController {
                 topupHistory,
             },
             message: 'Topup successful',
+        });
+    }
+    async topup_list({ request, response }) {
+        const { secret_key, page, limit } = request.body();
+        if (!secret_key) {
+            response.status(400);
+            return response.json({
+                status: 0,
+                message: 'Missing secret key',
+            });
+        }
+        const user = await User_1.default.query().where('secret_key', secret_key).first();
+        if (!user) {
+            response.status(400);
+            return response.json({
+                status: 0,
+                message: 'Invalid user',
+            });
+        }
+        const topupList = await Topup_1.default.query()
+            .where('user_id', user.id)
+            .orderBy('id', 'desc')
+            .paginate(page, limit);
+        return response.json({
+            status: 1,
+            data: topupList,
         });
     }
     async health_check({ request, response }) {

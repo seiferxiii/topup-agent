@@ -27,6 +27,7 @@ exports.default = Env_1.default.rules({
     MMR_COLUMN: Env_1.default.schema.string(),
     PK_KILL_COLUMN: Env_1.default.schema.string(),
     PK_DEATH_COLUMN: Env_1.default.schema.string(),
-    CHARACTER_LEVEL_DATE_COLUMN: Env_1.default.schema.string()
+    CHARACTER_LEVEL_DATE_COLUMN: Env_1.default.schema.string(),
+    DISBURSEMENT_TYPE: Env_1.default.schema.enum(['epoints', 'topup']),
 });
 //# sourceMappingURL=env.js.map

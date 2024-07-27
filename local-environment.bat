@@ -1,0 +1,1 @@
+npm install pm2 -g && npm install yarn -g && yarn install
