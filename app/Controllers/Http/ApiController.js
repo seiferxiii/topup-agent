@@ -74,7 +74,7 @@ class ApiController {
         });
     }
     async topup({ request, response }) {
-        const { secret_key, amount, order_id } = request.body();
+        const { secret_key, amount, order_id, disbursement_type } = request.body();
         if (!secret_key) {
             response.status(400);
             return response.json({
@@ -106,7 +106,7 @@ class ApiController {
                 message: 'Invalid user',
             });
         }
-        if (Env_1.default.get('DISBURSEMENT_TYPE') == 'epoints') {
+        if (Number(disbursement_type) == 0) {
             if (Number(user.epoints) > 0) {
                 user.epoints = Number(user.epoints) + Number(amount);
             }
@@ -115,7 +115,7 @@ class ApiController {
             }
             await user.save();
         }
-        if (Env_1.default.get('DISBURSEMENT_TYPE') == 'topup') {
+        if (Number(disbursement_type) == 1) {
             let topupCode = ran_1.default.generateRandomString(11);
             let topupPin = ran_1.default.generateRandomString(8);
             const topupCodeCheck = await Topup_1.default.findBy('code', topupCode);
